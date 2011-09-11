@@ -3,19 +3,37 @@ package adder;
 import static org.hamcrest.core.Is.*;
 import static org.junit.Assert.*;
 
-import org.junit.Test;
+import java.util.Arrays;
+import java.util.List;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
+@RunWith(Parameterized.class)
 public class AdderTest {
-	@Test
-	public void _0に0を足すと0が返ってくる() {
-		assertThat(new Adder(0).proc(0), is(0));
+	private int a;
+	private int b;
+	private int expected;
+	public AdderTest(int a, int b, int expected) {
+		this.a = a;
+		this.b = b;
+		this.expected = expected;
+	}
+	@Parameters
+	public static List<Object[]> testData() {
+		Object[][] datas = new Object[][] {
+			{ 0, 0, 0 },
+			{ 1, 1, 2 },
+			{ 2, 3, 5 },
+			{ 3, 3, 6 },
+			{ 4, 4, 8 },
+		};
+		return Arrays.asList(datas);
 	}
 	@Test
-	public void _1に1を足すと2が返ってくる() {
-		assertThat(new Adder(1).proc(1), is(2));
-	}
-	@Test
-	public void _2に3を足すと5が返ってくる() {
-		assertThat(new Adder(2).proc(3), is(5));
+	public void 足し算のテスト() throws Exception {
+		assertThat(new Adder(a).proc(b), is(expected));
 	}
 }
