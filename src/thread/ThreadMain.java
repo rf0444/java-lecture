@@ -1,31 +1,40 @@
 package thread;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ThreadMain {
-	public static void main(String[] args) {
+	private static final String LN = System.getProperty("line.separator");
+	public static void main(String[] args) throws Exception {
 		ExecutorService service = Executors.newFixedThreadPool(2);
-		service.execute(new Runnable() {
-			public void run() {
+		Future<String> fa = service.submit(new Callable<String>() {
+			public String call() {
+				StringBuilder buf = new StringBuilder();
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 100; j++) {
-						System.out.print("a");
+						buf.append("a");
 					}
-					System.out.println();
+					buf.append(LN);
 				}
+				return buf.toString();
 			}
 		});
-		service.execute(new Runnable() {
-			public void run() {
+		Future<String> fb = service.submit(new Callable<String>() {
+			public String call() {
+				StringBuilder buf = new StringBuilder();
 				for (int i = 0; i < 10; i++) {
 					for (int j = 0; j < 100; j++) {
-						System.out.print("b");
+						buf.append("b");
 					}
-					System.out.println();
+					buf.append(LN);
 				}
+				return buf.toString();
 			}
 		});
+		System.out.println(fa.get());
+		System.out.println(fb.get());
 		service.shutdown();
 	}
 }
